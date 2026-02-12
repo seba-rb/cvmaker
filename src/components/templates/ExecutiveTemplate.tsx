@@ -213,13 +213,15 @@ function ContactBlock({ resume }: { resume: Resume }) {
     { label: 'tel', value: contact.phone },
     { label: 'email', value: contact.email },
     { label: 'loc', value: contact.location },
-    { label: 'web', value: contact.website || contact.linkedin },
+    { label: 'linkedin', value: contact.linkedin },
+    { label: 'web', value: contact.website },
   ].filter((i) => i.value)
 
   const icons: Record<string, string> = {
     tel: '\u260E',
     email: '\u2709',
     loc: '\u25CB',
+    linkedin: '\u0069\u006E',
     web: '\u25CE',
   }
 
