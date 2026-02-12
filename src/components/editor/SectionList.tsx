@@ -17,7 +17,6 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useResumeStore } from '../../stores/resume-store'
-import { ContactForm } from './ContactForm'
 import { SummaryForm } from './SummaryForm'
 import { ExperienceForm } from './ExperienceForm'
 import { EducationForm } from './EducationForm'
