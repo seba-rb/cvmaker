@@ -34,9 +34,20 @@ function SectionHeading({ title }: { title: string }) {
   )
 }
 
-function parseBullets(text: string) {
+function parseDescription(text: string) {
   const lines = text.split('\n').filter((l) => l.trim())
-  return lines.map((line) => line.replace(/^[•\-\*]\s*/, ''))
+
+  // Check if text uses bullet format (*, -, or •)
+  const hasBullets = lines.some((line) => /^[\*\-•]\s/.test(line))
+
+  if (hasBullets) {
+    return {
+      type: 'bullets' as const,
+      items: lines.map((line) => line.replace(/^[\*\-•]\s*/, ''))
+    }
+  }
+
+  return { type: 'text' as const, content: text }
 }
 
 // ── LEFT COLUMN ─────────────────────────────────────────────────────────────
@@ -83,7 +94,7 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
     ? `${entry.startDate} - ${entry.current ? 'PRESENTE' : entry.endDate}`
     : ''
   const orgLine = [entry.organization, entry.location].filter(Boolean).join(' | ')
-  const bullets = entry.description ? parseBullets(entry.description) : []
+  const description = entry.description ? parseDescription(entry.description) : null
 
   return (
     <div style={{ marginBottom: '16px' }}>
@@ -142,8 +153,8 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
             </div>
           )}
 
-          {/* Bullets — regular weight, relaxed line height */}
-          {bullets.length > 0 && (
+          {/* Description — bullets or plain text */}
+          {description && description.type === 'bullets' && (
             <ul
               style={{
                 margin: '6px 0 0 0',
@@ -156,12 +167,27 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 lineHeight: 1.6,
               }}
             >
-              {bullets.map((b, i) => (
+              {description.items.map((b, i) => (
                 <li key={i} style={{ marginBottom: '3px' }}>
                   {b}
                 </li>
               ))}
             </ul>
+          )}
+          {description && description.type === 'text' && (
+            <div
+              style={{
+                margin: '6px 0 0 0',
+                fontSize: '0.78em',
+                fontWeight: 400,
+                letterSpacing: '0.005em',
+                color: '#444',
+                lineHeight: 1.6,
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {description.content}
+            </div>
           )}
         </div>
       </div>
@@ -173,7 +199,7 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
   const rawUrl = entry.url || ''
   const displayUrl = rawUrl.replace(/^https?:\/\//, '')
   const href = rawUrl && !/^https?:\/\//.test(rawUrl) ? `https://${rawUrl}` : rawUrl
-  const bullets = entry.description ? parseBullets(entry.description) : []
+  const description = entry.description ? parseDescription(entry.description) : null
 
   return (
     <div style={{ marginBottom: '16px' }}>
@@ -220,7 +246,7 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
               {displayUrl}
             </a>
           )}
-          {bullets.length > 0 && (
+          {description && description.type === 'bullets' && (
             <ul
               style={{
                 margin: '6px 0 0 0',
@@ -233,12 +259,27 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 lineHeight: 1.6,
               }}
             >
-              {bullets.map((b, i) => (
+              {description.items.map((b, i) => (
                 <li key={i} style={{ marginBottom: '3px' }}>
                   {b}
                 </li>
               ))}
             </ul>
+          )}
+          {description && description.type === 'text' && (
+            <div
+              style={{
+                margin: '6px 0 0 0',
+                fontSize: '0.78em',
+                fontWeight: 400,
+                letterSpacing: '0.005em',
+                color: '#444',
+                lineHeight: 1.6,
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {description.content}
+            </div>
           )}
           {entry.skills && entry.skills.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
@@ -377,7 +418,7 @@ function EducationBlock({ section }: { section: Section }) {
         const dateRange = entry.startDate
           ? `${entry.startDate} - ${entry.current ? 'Presente' : entry.endDate}`
           : ''
-        const bullets = entry.description ? parseBullets(entry.description) : []
+        const description = entry.description ? parseDescription(entry.description) : null
 
         return (
           <div key={entry.id} style={{ marginBottom: '12px' }}>
@@ -407,7 +448,23 @@ function EducationBlock({ section }: { section: Section }) {
                 {entry.organization}
               </div>
             )}
-            {(entry.title || bullets.length > 0) && (
+            {entry.title && !description && (
+              <ul
+                style={{
+                  margin: '4px 0 0 0',
+                  paddingLeft: '16px',
+                  listStyleType: 'disc',
+                  fontSize: '0.76em',
+                  fontWeight: 400,
+                  letterSpacing: '0.005em',
+                  color: '#444',
+                  lineHeight: 1.55,
+                }}
+              >
+                <li>{entry.title}</li>
+              </ul>
+            )}
+            {description && description.type === 'bullets' && (
               <ul
                 style={{
                   margin: '4px 0 0 0',
@@ -421,10 +478,28 @@ function EducationBlock({ section }: { section: Section }) {
                 }}
               >
                 {entry.title && <li>{entry.title}</li>}
-                {bullets.map((b, i) => (
+                {description.items.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>
+            )}
+            {description && description.type === 'text' && (
+              <div
+                style={{
+                  margin: '4px 0 0 0',
+                  fontSize: '0.76em',
+                  fontWeight: 400,
+                  letterSpacing: '0.005em',
+                  color: '#444',
+                  lineHeight: 1.55,
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {entry.title && (
+                  <div style={{ fontWeight: 600, marginBottom: '2px' }}>{entry.title}</div>
+                )}
+                {description.content}
+              </div>
             )}
           </div>
         )
