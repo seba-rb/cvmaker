@@ -11,8 +11,12 @@ export async function exportToPdf(pageSize: PageSize) {
     return
   }
 
-  const width = pageSize === 'a4' ? '210mm' : '216mm'
-  const height = pageSize === 'a4' ? '297mm' : '279mm'
+  const width = pageSize === 'a4' ? '210mm' : pageSize === 'letter' ? '216mm' : '210mm'
+  const height = pageSize === 'a4' ? '297mm' : pageSize === 'letter' ? '279mm' : 'auto'
+
+  const pageRule = pageSize === 'auto'
+    ? `size: ${width} auto;`
+    : `size: ${width} ${height};`
 
   printWindow.document.write(`
     <!DOCTYPE html>
@@ -22,7 +26,7 @@ export async function exportToPdf(pageSize: PageSize) {
       <title>CV</title>
       <style>
         @page {
-          size: ${width} ${height};
+          ${pageRule}
           margin: 0;
         }
         html, body {

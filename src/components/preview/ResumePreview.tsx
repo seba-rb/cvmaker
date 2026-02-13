@@ -39,8 +39,8 @@ export const ResumePreview = forwardRef<HTMLDivElement>((_props, ref) => {
   const resume = useResumeStore((s) => s.resume)
   const { font, fontSize, pageSize } = resume.settings
 
-  const width = pageSize === 'a4' ? '210mm' : '216mm'
-  const minHeight = pageSize === 'a4' ? '297mm' : '279mm'
+  const width = pageSize === 'a4' ? '210mm' : pageSize === 'letter' ? '216mm' : '210mm'
+  const minHeight = pageSize === 'auto' ? 'auto' : pageSize === 'a4' ? '297mm' : '279mm'
 
   return (
     <div

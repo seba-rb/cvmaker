@@ -20,6 +20,7 @@ const fonts: { value: FontFamily; label: string }[] = [
 const pageSizes: { value: PageSize; label: string }[] = [
   { value: 'letter', label: 'Carta' },
   { value: 'a4', label: 'A4' },
+  { value: 'auto', label: 'Auto (ajustar altura)' },
 ]
 
 const accentColors = [

@@ -4,7 +4,7 @@ export type FontFamily = 'inter' | 'montserrat' | 'calibri' | 'garamond' | 'geor
 
 export type FontSize = 'small' | 'medium' | 'large'
 
-export type PageSize = 'letter' | 'a4'
+export type PageSize = 'letter' | 'a4' | 'auto'
 
 export type SectionType =
   | 'summary'
