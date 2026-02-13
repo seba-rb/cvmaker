@@ -148,6 +148,7 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
               style={{
                 margin: '6px 0 0 0',
                 paddingLeft: '16px',
+                listStyleType: 'disc',
                 fontSize: '0.78em',
                 fontWeight: 400,
                 letterSpacing: '0.005em',
@@ -295,6 +296,7 @@ function EducationBlock({ section }: { section: Section }) {
                 style={{
                   margin: '4px 0 0 0',
                   paddingLeft: '16px',
+                  listStyleType: 'disc',
                   fontSize: '0.76em',
                   fontWeight: 400,
                   letterSpacing: '0.005em',
@@ -327,6 +329,7 @@ function SkillsBlock({ section }: { section: Section }) {
         style={{
           margin: 0,
           paddingLeft: '16px',
+          listStyleType: 'disc',
           fontSize: '0.76em',
           fontWeight: 400,
           letterSpacing: '0.005em',
