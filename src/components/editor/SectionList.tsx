@@ -19,6 +19,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useResumeStore } from '../../stores/resume-store'
 import { SummaryForm } from './SummaryForm'
 import { ExperienceForm } from './ExperienceForm'
+import { ProjectsForm } from './ProjectsForm'
 import { EducationForm } from './EducationForm'
 import { SkillsForm } from './SkillsForm'
 import { ReferencesForm } from './ReferencesForm'
@@ -29,10 +30,11 @@ function SectionContent({ section }: { section: Section }) {
     case 'summary':
       return <SummaryForm section={section} />
     case 'experience':
-    case 'projects':
     case 'certifications':
     case 'custom':
       return <ExperienceForm section={section} />
+    case 'projects':
+      return <ProjectsForm section={section} />
     case 'education':
       return <EducationForm section={section} />
     case 'skills':

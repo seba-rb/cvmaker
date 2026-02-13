@@ -5,6 +5,7 @@ export function createEntry(overrides: Partial<Entry> = {}): Entry {
   return {
     id: uuid(),
     title: '',
+    url: '',
     organization: '',
     location: '',
     startDate: '',

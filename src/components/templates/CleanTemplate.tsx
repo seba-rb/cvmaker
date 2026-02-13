@@ -91,6 +91,40 @@ function ExperienceEntry({ entry }: { entry: Entry }) {
   )
 }
 
+function ProjectEntry({ entry }: { entry: Entry }) {
+  const rawUrl = entry.url || ''
+  const displayUrl = rawUrl.replace(/^https?:\/\//, '')
+  const href = rawUrl && !/^https?:\/\//.test(rawUrl) ? `https://${rawUrl}` : rawUrl
+
+  return (
+    <div style={{ marginBottom: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+        <span style={{ fontSize: '0.9em', fontWeight: 600 }}>{entry.title}</span>
+        {displayUrl && (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: '0.8em', color: '#4a7cbe', textDecoration: 'underline' }}
+          >
+            {displayUrl}
+          </a>
+        )}
+      </div>
+      {entry.description && (
+        <div style={{ fontSize: '0.85em', marginTop: '3px', whiteSpace: 'pre-line', color: '#444' }}>
+          {entry.description}
+        </div>
+      )}
+      {entry.skills && entry.skills.length > 0 && (
+        <div style={{ fontSize: '0.82em', color: '#555', marginTop: '3px' }}>
+          {entry.skills.join('  ·  ')}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function SkillsContent({ entry }: { entry: Entry }) {
   return (
     <div style={{ fontSize: '0.85em', color: '#444' }}>
@@ -111,6 +145,8 @@ function SectionRenderer({ section }: { section: Section }) {
         </div>
       ) : section.type === 'skills' || section.type === 'languages' ? (
         section.entries[0] && <SkillsContent entry={section.entries[0]} />
+      ) : section.type === 'projects' ? (
+        section.entries.map((entry) => <ProjectEntry key={entry.id} entry={entry} />)
       ) : section.type === 'references' ? (
         section.entries.map((entry) => (
           <div key={entry.id} style={{ marginBottom: '10px', fontSize: '0.85em' }}>

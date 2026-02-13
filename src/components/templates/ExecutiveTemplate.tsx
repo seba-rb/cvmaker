@@ -169,6 +169,114 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
   )
 }
 
+function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
+  const rawUrl = entry.url || ''
+  const displayUrl = rawUrl.replace(/^https?:\/\//, '')
+  const href = rawUrl && !/^https?:\/\//.test(rawUrl) ? `https://${rawUrl}` : rawUrl
+  const bullets = entry.description ? parseBullets(entry.description) : []
+
+  return (
+    <div style={{ marginBottom: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+        <span
+          style={{
+            display: 'inline-block',
+            width: '8px',
+            height: '8px',
+            backgroundColor: accent,
+            borderRadius: '1px',
+            marginTop: '4px',
+            flexShrink: 0,
+          }}
+        />
+        <div style={{ flex: 1 }}>
+          {entry.title && (
+            <div
+              style={{
+                fontSize: '0.84em',
+                fontWeight: 600,
+                letterSpacing: '0.01em',
+                color: '#2d2d2d',
+              }}
+            >
+              {entry.title}
+            </div>
+          )}
+          {displayUrl && (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '0.76em',
+                fontWeight: 400,
+                letterSpacing: '0.01em',
+                color: accent,
+                textDecoration: 'underline',
+                display: 'block',
+                marginTop: '1px',
+              }}
+            >
+              {displayUrl}
+            </a>
+          )}
+          {bullets.length > 0 && (
+            <ul
+              style={{
+                margin: '6px 0 0 0',
+                paddingLeft: '16px',
+                listStyleType: 'disc',
+                fontSize: '0.78em',
+                fontWeight: 400,
+                letterSpacing: '0.005em',
+                color: '#444',
+                lineHeight: 1.6,
+              }}
+            >
+              {bullets.map((b, i) => (
+                <li key={i} style={{ marginBottom: '3px' }}>
+                  {b}
+                </li>
+              ))}
+            </ul>
+          )}
+          {entry.skills && entry.skills.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
+              {entry.skills.map((skill) => (
+                <span
+                  key={skill}
+                  style={{
+                    padding: '1px 7px',
+                    fontSize: '0.72em',
+                    fontWeight: 400,
+                    color: '#555',
+                    backgroundColor: '#f0f0f0',
+                    borderRadius: '2px',
+                  }}
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProjectsBlock({ section, accent }: { section: Section; accent: string }) {
+  if (!section.visible) return null
+  return (
+    <div style={{ marginBottom: '24px' }}>
+      <SectionHeading title={section.title} />
+      {section.entries.map((entry) => (
+        <ProjectEntry key={entry.id} entry={entry} accent={accent} />
+      ))}
+    </div>
+  )
+}
+
 function SummaryBlock({ section }: { section: Section }) {
   if (!section.visible) return null
   const text = section.entries[0]?.description
@@ -442,10 +550,11 @@ export function ExecutiveTemplate({ resume }: { resume: Resume }) {
       case 'summary':
         return <SummaryBlock key={section.id} section={section} />
       case 'experience':
-      case 'projects':
       case 'certifications':
       case 'custom':
         return <ExperienceBlock key={section.id} section={section} accent={accent} />
+      case 'projects':
+        return <ProjectsBlock key={section.id} section={section} accent={accent} />
       case 'education':
         return <EducationBlock key={section.id} section={section} />
       case 'references':

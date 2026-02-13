@@ -107,6 +107,54 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
   )
 }
 
+function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
+  const rawUrl = entry.url || ''
+  const displayUrl = rawUrl.replace(/^https?:\/\//, '')
+  const href = rawUrl && !/^https?:\/\//.test(rawUrl) ? `https://${rawUrl}` : rawUrl
+
+  return (
+    <div style={{ marginBottom: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+        <strong style={{ fontSize: '0.9em', color: accent }}>{entry.title}</strong>
+        {displayUrl && (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: '0.8em', color: accent, textDecoration: 'underline', opacity: 0.8 }}
+          >
+            {displayUrl}
+          </a>
+        )}
+      </div>
+      {entry.description && (
+        <div style={{ fontSize: '0.85em', marginTop: '4px', whiteSpace: 'pre-line', color: '#333' }}>
+          {entry.description}
+        </div>
+      )}
+      {entry.skills && entry.skills.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '5px' }}>
+          {entry.skills.map((skill) => (
+            <span
+              key={skill}
+              style={{
+                padding: '1px 9px',
+                backgroundColor: `${accent}10`,
+                border: `1px solid ${accent}30`,
+                borderRadius: '999px',
+                fontSize: '0.78em',
+                color: '#333',
+              }}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function SkillsContent({ entry, accent }: { entry: Entry; accent: string }) {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', fontSize: '0.85em' }}>
@@ -140,6 +188,10 @@ function SectionRenderer({ section, accent }: { section: Section; accent: string
         </div>
       ) : section.type === 'skills' || section.type === 'languages' ? (
         section.entries[0] && <SkillsContent entry={section.entries[0]} accent={accent} />
+      ) : section.type === 'projects' ? (
+        section.entries.map((entry) => (
+          <ProjectEntry key={entry.id} entry={entry} accent={accent} />
+        ))
       ) : section.type === 'references' ? (
         section.entries.map((entry) => (
           <div key={entry.id} style={{ marginBottom: '12px', fontSize: '0.85em' }}>

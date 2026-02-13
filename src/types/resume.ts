@@ -37,6 +37,7 @@ export interface ContactInfo {
 export interface Entry {
   id: string
   title: string
+  url: string
   organization: string
   location: string
   startDate: string
