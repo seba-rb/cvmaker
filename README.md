@@ -1,4 +1,4 @@
-# CVMaker
+# Profyle
 
 <div align="center">
   <h3>Free, Simple, ATS-Friendly Resume Builder</h3>
@@ -9,9 +9,9 @@
 
 ## 🎯 Overview
 
-CVMaker is a lightweight, open-source web application for building ATS-compatible resumes. Built with modern web technologies, it offers real-time preview, multiple professional templates, and AI-powered writing assistance—all running entirely in your browser.
+Profyle is a lightweight, open-source web application for building ATS-compatible resumes. Built with modern web technologies, it offers real-time preview, multiple professional templates, and AI-powered writing assistance—all running entirely in your browser.
 
-### Why CVMaker?
+### Why Profyle?
 
 - **Truly Free** – No hidden costs, no watermarks, no premium features
 - **Privacy First** – All data stays on your device; no account required
@@ -60,8 +60,8 @@ Powered by Google Gemini 2.0 Flash:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/seba-rb/cvmaker.git
-   cd cvmaker
+   git clone https://github.com/seba-rb/profyle.git
+   cd profyle
    ```
 
 2. **Install dependencies**
@@ -95,7 +95,7 @@ The built files will be in the `dist/` directory.
 To use the AI writing features:
 
 1. Get a free API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Click the settings icon in CVMaker
+2. Click the settings icon in Profyle
 3. Enter your API key
 4. Start using AI suggestions
 

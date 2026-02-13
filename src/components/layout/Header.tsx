@@ -25,7 +25,7 @@ export function Header({ onExportPdf, onOpenApiKey }: HeaderProps) {
   return (
     <header className="h-14 border-b border-gray-200 bg-white px-4 flex items-center justify-between shrink-0">
       <div className="flex items-center gap-2">
-        <h1 className="text-lg font-semibold text-gray-900">CVMaker</h1>
+        <h1 className="text-lg font-semibold text-gray-900">Profyle</h1>
         <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">beta</span>
       </div>
 

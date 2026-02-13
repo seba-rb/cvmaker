@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'cvmaker-gemini-key'
+const STORAGE_KEY = 'profyle-gemini-key'
 
 export function getApiKey(): string {
   return localStorage.getItem(STORAGE_KEY) || ''

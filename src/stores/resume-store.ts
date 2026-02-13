@@ -39,7 +39,7 @@ interface ResumeStore {
 
 function loadFromStorage(): Resume {
   try {
-    const saved = localStorage.getItem('cvmaker-resume')
+    const saved = localStorage.getItem('profyle-resume')
     if (saved) return JSON.parse(saved)
   } catch {
     // ignore
@@ -49,7 +49,7 @@ function loadFromStorage(): Resume {
 
 function saveToStorage(resume: Resume) {
   try {
-    localStorage.setItem('cvmaker-resume', JSON.stringify(resume))
+    localStorage.setItem('profyle-resume', JSON.stringify(resume))
   } catch {
     // ignore
   }
