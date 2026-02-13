@@ -3,13 +3,13 @@ import type { Resume, Section, Entry } from '../../types/resume'
 function ContactHeader({ resume }: { resume: Resume }) {
   const { contact } = resume
 
-  const contactItems = [
-    contact.email,
-    contact.phone,
-    contact.location,
-    contact.linkedin,
-    contact.website,
-  ].filter(Boolean)
+  const contactItems: { text: string; href?: string }[] = [
+    contact.email ? { text: contact.email, href: `mailto:${contact.email}` } : null,
+    contact.phone ? { text: contact.phone } : null,
+    contact.location ? { text: contact.location } : null,
+    contact.linkedin ? { text: contact.linkedin, href: !/^https?:\/\//.test(contact.linkedin) ? `https://${contact.linkedin}` : contact.linkedin } : null,
+    contact.website ? { text: contact.website, href: !/^https?:\/\//.test(contact.website) ? `https://${contact.website}` : contact.website } : null,
+  ].filter((item): item is { text: string; href?: string } => item !== null)
 
   return (
     <div style={{ marginBottom: '24px' }}>
@@ -36,7 +36,13 @@ function ContactHeader({ resume }: { resume: Resume }) {
         {contactItems.map((item, i) => (
           <span key={i}>
             {i > 0 && <span style={{ marginRight: '10px', color: '#ccc' }}>·</span>}
-            {item}
+            {item.href ? (
+              <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ color: '#4a7cbe', textDecoration: 'underline' }}>
+                {item.text}
+              </a>
+            ) : (
+              item.text
+            )}
           </span>
         ))}
       </div>

@@ -318,12 +318,14 @@ function ExperienceBlock({ section, accent }: { section: Section; accent: string
 function ContactBlock({ resume }: { resume: Resume }) {
   const { contact } = resume
 
-  const items: { label: string; value: string }[] = [
+  const accent = resume.settings.accentColor
+
+  const items: { label: string; value: string; href?: string }[] = [
     { label: 'tel', value: contact.phone },
-    { label: 'email', value: contact.email },
+    { label: 'email', value: contact.email, href: contact.email ? `mailto:${contact.email}` : undefined },
     { label: 'loc', value: contact.location },
-    { label: 'linkedin', value: contact.linkedin },
-    { label: 'web', value: contact.website },
+    { label: 'linkedin', value: contact.linkedin, href: contact.linkedin ? (!/^https?:\/\//.test(contact.linkedin) ? `https://${contact.linkedin}` : contact.linkedin) : undefined },
+    { label: 'web', value: contact.website, href: contact.website ? (!/^https?:\/\//.test(contact.website) ? `https://${contact.website}` : contact.website) : undefined },
   ].filter((i) => i.value)
 
   const icons: Record<string, string> = {
@@ -353,7 +355,13 @@ function ContactBlock({ resume }: { resume: Resume }) {
           <span style={{ fontSize: '1em', color: '#888', width: '14px', textAlign: 'center' }}>
             {icons[item.label]}
           </span>
-          {item.value}
+          {item.href ? (
+            <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ color: accent, textDecoration: 'underline' }}>
+              {item.value}
+            </a>
+          ) : (
+            item.value
+          )}
         </div>
       ))}
     </div>
