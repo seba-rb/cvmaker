@@ -34,6 +34,36 @@ function SectionHeading({ title }: { title: string }) {
   )
 }
 
+function parseBoldText(text: string): React.ReactNode {
+  // Match **text** or *text* for bold
+  const parts: React.ReactNode[] = []
+  let lastIndex = 0
+
+  // Regex: matches **text** or *text*
+  const boldRegex = /\*\*(.+?)\*\*|\*([^*\n]+?)\*/g
+  let match: RegExpExecArray | null
+
+  while ((match = boldRegex.exec(text)) !== null) {
+    // Add text before the match
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index))
+    }
+
+    // Add bold text
+    const boldContent = match[1] || match[2] // group 1 for **, group 2 for *
+    parts.push(<strong key={match.index}>{boldContent}</strong>)
+
+    lastIndex = match.index + match[0].length
+  }
+
+  // Add remaining text
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex))
+  }
+
+  return parts.length > 0 ? parts : text
+}
+
 function parseDescription(text: string) {
   const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
 
@@ -177,11 +207,11 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 part.type === 'bullet' ? (
                   <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '3px' }}>
                     <span style={{ flexShrink: 0 }}>•</span>
-                    <span style={{ flex: 1 }}>{part.content}</span>
+                    <span style={{ flex: 1 }}>{parseBoldText(part.content)}</span>
                   </div>
                 ) : (
                   <div key={i} style={{ marginBottom: '3px' }}>
-                    {part.content}
+                    {parseBoldText(part.content)}
                   </div>
                 )
               )}
@@ -199,7 +229,7 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 whiteSpace: 'pre-line',
               }}
             >
-              {description.content}
+              {parseBoldText(description.content)}
             </div>
           )}
         </div>
@@ -274,11 +304,11 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 part.type === 'bullet' ? (
                   <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '3px' }}>
                     <span style={{ flexShrink: 0 }}>•</span>
-                    <span style={{ flex: 1 }}>{part.content}</span>
+                    <span style={{ flex: 1 }}>{parseBoldText(part.content)}</span>
                   </div>
                 ) : (
                   <div key={i} style={{ marginBottom: '3px' }}>
-                    {part.content}
+                    {parseBoldText(part.content)}
                   </div>
                 )
               )}
@@ -296,7 +326,7 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 whiteSpace: 'pre-line',
               }}
             >
-              {description.content}
+              {parseBoldText(description.content)}
             </div>
           )}
           {entry.skills && entry.skills.length > 0 && (

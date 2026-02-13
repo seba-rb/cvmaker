@@ -1,5 +1,27 @@
 import type { Resume, Section, Entry } from '../../types/resume'
 
+function parseBoldText(text: string): React.ReactNode {
+  const parts: React.ReactNode[] = []
+  let lastIndex = 0
+  const boldRegex = /\*\*(.+?)\*\*|\*([^*\n]+?)\*/g
+  let match: RegExpExecArray | null
+
+  while ((match = boldRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index))
+    }
+    const boldContent = match[1] || match[2]
+    parts.push(<strong key={match.index}>{boldContent}</strong>)
+    lastIndex = match.index + match[0].length
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex))
+  }
+
+  return parts.length > 0 ? parts : text
+}
+
 function ContactHeader({ resume }: { resume: Resume }) {
   const { contact, settings } = resume
   const accent = settings.accentColor
@@ -107,7 +129,7 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
       )}
       {entry.description && (
         <div style={{ fontSize: '0.85em', marginTop: '4px', whiteSpace: 'pre-line', color: '#333' }}>
-          {entry.description}
+          {parseBoldText(entry.description)}
         </div>
       )}
     </div>
