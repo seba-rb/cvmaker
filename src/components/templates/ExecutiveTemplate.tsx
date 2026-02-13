@@ -343,7 +343,7 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
                     borderRadius: '2px',
                   }}
                 >
-                  {skill}
+                  {parseBoldText(skill)}
                 </span>
               ))}
             </div>
@@ -586,7 +586,7 @@ function SkillsBlock({ section }: { section: Section }) {
         }}
       >
         {skills.map((skill) => (
-          <li key={skill}>{skill}</li>
+          <li key={skill}>{parseBoldText(skill)}</li>
         ))}
       </ul>
     </div>

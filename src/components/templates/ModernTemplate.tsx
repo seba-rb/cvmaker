@@ -175,7 +175,7 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 color: '#333',
               }}
             >
-              {skill}
+              {parseBoldText(skill)}
             </span>
           ))}
         </div>

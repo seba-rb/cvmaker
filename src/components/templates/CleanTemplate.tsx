@@ -146,7 +146,12 @@ function ProjectEntry({ entry }: { entry: Entry }) {
       )}
       {entry.skills && entry.skills.length > 0 && (
         <div style={{ fontSize: '0.82em', color: '#555', marginTop: '3px' }}>
-          {entry.skills.join('  ·  ')}
+          {entry.skills.map((skill, i) => (
+            <span key={i}>
+              {i > 0 && '  ·  '}
+              {parseBoldText(skill)}
+            </span>
+          ))}
         </div>
       )}
     </div>
@@ -156,7 +161,12 @@ function ProjectEntry({ entry }: { entry: Entry }) {
 function SkillsContent({ entry }: { entry: Entry }) {
   return (
     <div style={{ fontSize: '0.85em', color: '#444' }}>
-      {entry.skills.join('  ·  ')}
+      {entry.skills.map((skill, i) => (
+        <span key={i}>
+          {i > 0 && '  ·  '}
+          {parseBoldText(skill)}
+        </span>
+      ))}
     </div>
   )
 }
