@@ -33,8 +33,8 @@ export const defaultResume: Resume = {
   title: 'Mi CV',
   updatedAt: new Date().toISOString(),
   settings: {
-    template: 'classic',
-    font: 'inter',
+    template: 'executive',
+    font: 'montserrat',
     accentColor: '#2563eb',
     fontSize: 'medium',
     pageSize: 'letter',
