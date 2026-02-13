@@ -35,16 +35,24 @@ function SectionHeading({ title }: { title: string }) {
 }
 
 function parseDescription(text: string) {
-  const lines = text.split('\n').filter((l) => l.trim())
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
 
-  // Check if text uses bullet format (*, -, or •)
+  // Check if ANY line uses bullet format (*, -, or •)
   const hasBullets = lines.some((line) => /^[\*\-•]\s/.test(line))
 
   if (hasBullets) {
-    return {
-      type: 'bullets' as const,
-      items: lines.map((line) => line.replace(/^[\*\-•]\s*/, ''))
-    }
+    // Mixed content: separate normal text from bullets
+    const parts: Array<{ type: 'text' | 'bullet'; content: string }> = []
+
+    lines.forEach((line) => {
+      if (/^[\*\-•]\s/.test(line)) {
+        parts.push({ type: 'bullet', content: line.replace(/^[\*\-•]\s*/, '') })
+      } else {
+        parts.push({ type: 'text', content: line })
+      }
+    })
+
+    return { type: 'mixed' as const, parts }
   }
 
   return { type: 'text' as const, content: text }
@@ -153,13 +161,11 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
             </div>
           )}
 
-          {/* Description — bullets or plain text */}
-          {description && description.type === 'bullets' && (
-            <ul
+          {/* Description — mixed, bullets, or plain text */}
+          {description && description.type === 'mixed' && (
+            <div
               style={{
                 margin: '6px 0 0 0',
-                paddingLeft: '16px',
-                listStyleType: 'disc',
                 fontSize: '0.78em',
                 fontWeight: 400,
                 letterSpacing: '0.005em',
@@ -167,12 +173,19 @@ function ExperienceEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 lineHeight: 1.6,
               }}
             >
-              {description.items.map((b, i) => (
-                <li key={i} style={{ marginBottom: '3px' }}>
-                  {b}
-                </li>
-              ))}
-            </ul>
+              {description.parts.map((part, i) =>
+                part.type === 'bullet' ? (
+                  <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '3px' }}>
+                    <span style={{ flexShrink: 0 }}>•</span>
+                    <span style={{ flex: 1 }}>{part.content}</span>
+                  </div>
+                ) : (
+                  <div key={i} style={{ marginBottom: '3px' }}>
+                    {part.content}
+                  </div>
+                )
+              )}
+            </div>
           )}
           {description && description.type === 'text' && (
             <div
@@ -246,12 +259,10 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
               {displayUrl}
             </a>
           )}
-          {description && description.type === 'bullets' && (
-            <ul
+          {description && description.type === 'mixed' && (
+            <div
               style={{
                 margin: '6px 0 0 0',
-                paddingLeft: '16px',
-                listStyleType: 'disc',
                 fontSize: '0.78em',
                 fontWeight: 400,
                 letterSpacing: '0.005em',
@@ -259,12 +270,19 @@ function ProjectEntry({ entry, accent }: { entry: Entry; accent: string }) {
                 lineHeight: 1.6,
               }}
             >
-              {description.items.map((b, i) => (
-                <li key={i} style={{ marginBottom: '3px' }}>
-                  {b}
-                </li>
-              ))}
-            </ul>
+              {description.parts.map((part, i) =>
+                part.type === 'bullet' ? (
+                  <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '3px' }}>
+                    <span style={{ flexShrink: 0 }}>•</span>
+                    <span style={{ flex: 1 }}>{part.content}</span>
+                  </div>
+                ) : (
+                  <div key={i} style={{ marginBottom: '3px' }}>
+                    {part.content}
+                  </div>
+                )
+              )}
+            </div>
           )}
           {description && description.type === 'text' && (
             <div
@@ -464,12 +482,10 @@ function EducationBlock({ section }: { section: Section }) {
                 <li>{entry.title}</li>
               </ul>
             )}
-            {description && description.type === 'bullets' && (
-              <ul
+            {description && description.type === 'mixed' && (
+              <div
                 style={{
                   margin: '4px 0 0 0',
-                  paddingLeft: '16px',
-                  listStyleType: 'disc',
                   fontSize: '0.76em',
                   fontWeight: 400,
                   letterSpacing: '0.005em',
@@ -477,11 +493,22 @@ function EducationBlock({ section }: { section: Section }) {
                   lineHeight: 1.55,
                 }}
               >
-                {entry.title && <li>{entry.title}</li>}
-                {description.items.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
+                {entry.title && (
+                  <div style={{ fontWeight: 600, marginBottom: '2px' }}>{entry.title}</div>
+                )}
+                {description.parts.map((part, i) =>
+                  part.type === 'bullet' ? (
+                    <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '2px' }}>
+                      <span style={{ flexShrink: 0 }}>•</span>
+                      <span style={{ flex: 1 }}>{part.content}</span>
+                    </div>
+                  ) : (
+                    <div key={i} style={{ marginBottom: '2px' }}>
+                      {part.content}
+                    </div>
+                  )
+                )}
+              </div>
             )}
             {description && description.type === 'text' && (
               <div
